@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="icomfortwifi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+    <!-- Lennox iComfort WiFi Account -->
+	<bridge-type id="account">
+		<label>iComfort WiFi Account</label>
+		<description>An account for using the Lennox iComfort WiFi API</description>
+		
+		<config-description>
+		  <parameter name="userName" type="text" required="true">
+                <label>User Name</label>
+                <description>User name for logging in to iComfort system</description>
+            </parameter>
+            <parameter name="password" type="text" required="true">
+                <label>Password</label>
+                <context>password</context>
+                <description>Password for logging in to iComfort system</description>
+            </parameter>
+            <parameter name="refreshInterval" type="integer">
+                <label>Refresh Interval</label>
+                <description>The interval in seconds for refreshing the data from iComfort system</description>
+                <advanced>true</advanced>
+                <default>30</default>
+            </parameter>
+		</config-description>
+	</bridge-type>
+</thing:thing-descriptions>

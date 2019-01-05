@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="icomfortwifi"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+	<thing-type id="thermostat" listed="false">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="account" />
+		</supported-bridge-type-refs>
+		<label>iComfort WiFi Thermostat</label>
+		<description>This represents the iComfort WiFi Thermostat control display.</description>
+		<config-description>
+			<parameter name="id" type="text" required="true" readOnly="true">
+				<label>ID</label>
+				<description>ID of the display</description>
+			</parameter>
+			<parameter name="name" type="text" required="false" readOnly="true">
+				<label>Name</label>
+				<description>Name of the display</description>
+			</parameter>
+		</config-description>
+	</thing-type>
+	<thing-type id="zone" listed="false">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="account" />
+		</supported-bridge-type-refs>
+		<label>iComfort WiFi Heating Zone</label>
+		<description>This represents the iComfort WiFi Heating Zone.</description>
+		<channels>
+			<channel id="Temperature" typeId="temperature" />
+			<channel id="Humidity" typeId="humidity" />
+			<channel id="SystemStatus" typeId="systemStatus" />
+			<channel id="OperationMode" typeId="operationMode" />
+			<channel id="AwayMode" typeId="awayMode" />
+			<channel id="FanMode" typeId="fanMode" />
+			<channel id="CoolSetPoint" typeId="coolSetPoint" />
+			<channel id="HeatSetPoint" typeId="heatSetPoint" />
+		</channels>
+		<config-description>
+			<parameter name="id" type="text" required="true" readOnly="true">
+				<label>ID</label>
+				<description>ID of the zone</description>
+			</parameter>
+			<parameter name="name" type="text" required="false" readOnly="true">
+				<label>Name</label>
+				<description>Name of the zone</description>
+			</parameter>
+		</config-description>
+	</thing-type>
+</thing:thing-descriptions>
