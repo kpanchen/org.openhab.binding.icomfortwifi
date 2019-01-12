@@ -19,15 +19,16 @@ import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.StringUtil;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.request.ReqSetTStatInfo;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.BuildingsInfo;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.GatewayInfo;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.OwnerProfileInfo;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.SystemStatus;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.SystemsInfo;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.UserValidation;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.ZoneStatus;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.ZoneStatus.TempUnits;
+import org.openhab.binding.icomfortwifi.internal.api.models.request.ReqSetAwayMode;
+import org.openhab.binding.icomfortwifi.internal.api.models.request.ReqSetTStatInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.BuildingsInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.GatewayInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.OwnerProfileInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemsInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.UserValidation;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus.TempUnits;
 import org.openhab.binding.icomfortwifi.internal.configuration.iComfortWiFiBridgeConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -159,21 +160,6 @@ public class iComfortWiFiApiClient {
     // apiAccess.doAuthenticatedPut(url, modeCommand);
     // }
     //
-    // public void setHeatingZoneOverride(String zoneId, double setPoint) throws TimeoutException {
-    // HeatSetPoint setPointCommand = new HeatSetPointBuilder().setSetPoint(setPoint).build();
-    // setHeatingZoneOverride(zoneId, setPointCommand);
-    // }
-    //
-    // public void cancelHeatingZoneOverride(String zoneId) throws TimeoutException {
-    // HeatSetPoint setPointCommand = new HeatSetPointBuilder().setCancelSetPoint().build();
-    // setHeatingZoneOverride(zoneId, setPointCommand);
-    // }
-    //
-    // private void setHeatingZoneOverride(String zoneId, HeatSetPoint heatSetPoint) throws TimeoutException {
-    // String url = iComfortWiFiApiConstants.URL_V2_BASE + iComfortWiFiApiConstants.URL_V2_HEAT_SETPOINT;
-    // url = String.format(url, zoneId);
-    // apiAccess.doAuthenticatedPut(url, heatSetPoint);
-    // }
 
     public void setZoneHeatingPoint(ZoneStatus zoneStatus, Double setPoint) throws TimeoutException {
         String url = iComfortWiFiApiCommands.getCommandSetTStatInfo();
@@ -190,9 +176,24 @@ public class iComfortWiFiApiClient {
     }
 
     public void setZoneAwayMode(ZoneStatus zoneStatus, Integer awayMode) throws TimeoutException {
-        String url = iComfortWiFiApiCommands.getCommandSetAwayModeNew(zoneStatus.gatewaySN,
-                zoneStatus.zoneNumber.toString(), awayMode.toString());
+        ReqSetAwayMode requestSetAway = new ReqSetAwayMode(zoneStatus);
+        requestSetAway.awayMode = awayMode;
+        String url = iComfortWiFiApiCommands.getCommandSetAwayModeNew(requestSetAway);
         apiAccess.doAuthenticatedPut(url, null);
+    }
+
+    public void setZoneOperationMode(ZoneStatus zoneStatus, Integer operationMode) throws TimeoutException {
+        String url = iComfortWiFiApiCommands.getCommandSetTStatInfo();
+        ReqSetTStatInfo requestSetInfo = new ReqSetTStatInfo(zoneStatus);
+        requestSetInfo.operationMode = operationMode;
+        apiAccess.doAuthenticatedPut(url, requestSetInfo);
+    }
+
+    public void setZoneFanMode(ZoneStatus zoneStatus, Integer fanMode) throws TimeoutException {
+        String url = iComfortWiFiApiCommands.getCommandSetTStatInfo();
+        ReqSetTStatInfo requestSetInfo = new ReqSetTStatInfo(zoneStatus);
+        requestSetInfo.fanMode = fanMode;
+        apiAccess.doAuthenticatedPut(url, requestSetInfo);
     }
 
     private OwnerProfileInfo requestUserAccount(String userName) throws TimeoutException {

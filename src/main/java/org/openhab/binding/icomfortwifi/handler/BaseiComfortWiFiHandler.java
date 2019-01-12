@@ -14,7 +14,7 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.SystemsInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemsInfo;
 import org.openhab.binding.icomfortwifi.internal.configuration.iComfortWiFiThingConfiguration;
 
 /**

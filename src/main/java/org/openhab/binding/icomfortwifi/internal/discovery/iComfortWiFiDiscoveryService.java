@@ -27,8 +27,8 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.icomfortwifi.iComfortWiFiBindingConstants;
 import org.openhab.binding.icomfortwifi.handler.iComfortWiFiAccountStatusListener;
 import org.openhab.binding.icomfortwifi.handler.iComfortWiFiBridgeHandler;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.SystemInfo;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.ZoneStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

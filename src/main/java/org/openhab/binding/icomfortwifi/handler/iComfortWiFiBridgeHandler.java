@@ -30,9 +30,9 @@ import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.icomfortwifi.RunnableWithTimeout;
 import org.openhab.binding.icomfortwifi.internal.api.iComfortWiFiApiClient;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.SystemInfo;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.SystemsInfo;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.ZoneStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemsInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus;
 import org.openhab.binding.icomfortwifi.internal.configuration.iComfortWiFiBridgeConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +100,14 @@ public class iComfortWiFiBridgeHandler extends BaseBridgeHandler {
 
     public SystemsInfo getiComfortWiFiSystemsInfo() {
         return apiClient.getSystemsInfo();
+    }
+
+    public void setZoneOperationMode(ZoneStatus zoneStatus, Integer mode) {
+        tryToCall(() -> apiClient.setZoneOperationMode(zoneStatus, mode));
+    }
+
+    public void setZoneFanMode(ZoneStatus zoneStatus, Integer mode) {
+        tryToCall(() -> apiClient.setZoneFanMode(zoneStatus, mode));
     }
 
     public void setZoneAwayMode(ZoneStatus zoneStatus, Integer mode) {

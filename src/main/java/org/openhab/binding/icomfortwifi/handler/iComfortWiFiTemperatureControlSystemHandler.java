@@ -14,7 +14,7 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.SystemInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemInfo;
 
 /**
  * Handler for a temperature control system. Gets and sets global system mode.

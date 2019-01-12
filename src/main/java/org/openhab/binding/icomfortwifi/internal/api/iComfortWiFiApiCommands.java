@@ -8,6 +8,8 @@
  */
 package org.openhab.binding.icomfortwifi.internal.api;
 
+import org.openhab.binding.icomfortwifi.internal.api.models.request.ReqSetAwayMode;
+
 /**
  * List of iComfortWiFi API commands
  *
@@ -145,6 +147,7 @@ public final class iComfortWiFiApiCommands {
             private static final String AWAY_MODE = "awaymode";
             private static final String HEAT_SET_POINT = "heatsetpoint";
             private static final String COOL_SET_POINT = "coolsetpoint";
+            private static final String FAN_MODE = "fanmode";
             private static final String TEMP_SCALE = "tempscale";
 
             private paramsDef() {
@@ -253,22 +256,38 @@ public final class iComfortWiFiApiCommands {
         return urlBuilder.toString();
     }
 
-    public static String getCommandSetAwayModeNew(String gatewaySN, String zoneNumber, String awayMode) {
+    public static String getCommandSetAwayModeNew(ReqSetAwayMode reqSetAway) {
         // @formatter:off
         StringBuilder urlBuilder = new StringBuilder((new iComfortServiceURI()).getURI())
                 .append(setAwayModeNew.PATH)
                 .append("?")
                 .append(setAwayModeNew.paramsDef.GATEWAY_SN)
                 .append("=")
-                .append(gatewaySN)
+                .append(reqSetAway.gatewaySN.toString())
                 .append("&")
                 .append(setAwayModeNew.paramsDef.ZONE_NUMBER)
                 .append("=")
-                .append(zoneNumber)
+                .append(reqSetAway.zoneNumber.toString())
                 .append("&")
                 .append(setAwayModeNew.paramsDef.AWAY_MODE)
                 .append("=")
-                .append(awayMode);
+                .append(reqSetAway.awayMode.toString())
+                .append("&")
+                .append(setAwayModeNew.paramsDef.HEAT_SET_POINT)
+                .append("=")
+                .append(reqSetAway.heatSetPoint.toString())
+                .append("&")
+                .append(setAwayModeNew.paramsDef.COOL_SET_POINT)
+                .append("=")
+                .append(reqSetAway.coolSetPoint.toString())
+                .append("&")
+                .append(setAwayModeNew.paramsDef.FAN_MODE)
+                .append("=")
+                .append(reqSetAway.fanMode.toString())
+                .append("&")
+                .append(setAwayModeNew.paramsDef.TEMP_SCALE)
+                .append("=")
+                .append(reqSetAway.prefTempUnits.toString());
         // @formatter:on
         return urlBuilder.toString();
     }

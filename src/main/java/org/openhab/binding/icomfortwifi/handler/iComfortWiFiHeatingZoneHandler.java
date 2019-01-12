@@ -22,7 +22,7 @@ import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.icomfortwifi.iComfortWiFiBindingConstants;
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.ZoneStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus;
 
 /**
  * The {@link iComfortWiFiHeatingZoneHandler} is responsible for handling commands, which are
@@ -73,7 +73,7 @@ public class iComfortWiFiHeatingZoneHandler extends BaseiComfortWiFiHandler {
             updateState(iComfortWiFiBindingConstants.ZONE_FAN_MODE_CHANNEL,
                     new StringType(zoneStatus.fanMode.toString()));
             updateState(iComfortWiFiBindingConstants.ZONE_COOL_SET_POINT_CHANNEL,
-                    new QuantityType<>(zoneStatus.coolSetPoint, SIUnits.CELSIUS)); // FIX!
+                    new QuantityType<>(zoneStatus.coolSetPoint, SIUnits.CELSIUS));
             updateState(iComfortWiFiBindingConstants.ZONE_HEAT_SET_POINT_CHANNEL,
                     new QuantityType<>(zoneStatus.heatSetPoint, SIUnits.CELSIUS));
         }
@@ -91,12 +91,18 @@ public class iComfortWiFiHeatingZoneHandler extends BaseiComfortWiFiHandler {
                 String channelId = channelUID.getId();
                 if (iComfortWiFiBindingConstants.ZONE_COOL_SET_POINT_CHANNEL.equals(channelId)
                         && command instanceof QuantityType) {
-
                     bridge.setZoneCoolingPoint(zoneStatus, ((QuantityType<Temperature>) command).doubleValue());
 
                 } else if (iComfortWiFiBindingConstants.ZONE_HEAT_SET_POINT_CHANNEL.equals(channelId)
                         && command instanceof QuantityType) {
                     bridge.setZoneHeatingPoint(zoneStatus, ((QuantityType<Temperature>) command).doubleValue());
+
+                } else if (iComfortWiFiBindingConstants.ZONE_OPERATION_MODE_CHANNEL.equals(channelId)) {
+                    bridge.setZoneOperationMode(zoneStatus,
+                            ZoneStatus.OperationMode.valueOf(command.toString()).getOperationModeValue());
+
+                } else if (iComfortWiFiBindingConstants.ZONE_FAN_MODE_CHANNEL.equals(channelId)) {
+                    bridge.setZoneFanMode(zoneStatus, ZoneStatus.FanMode.valueOf(command.toString()).getFanModeValue());
 
                 } else if (iComfortWiFiBindingConstants.ZONE_AWAY_MODE_CHANNEL.equals(channelId)) {
                     bridge.setZoneAwayMode(zoneStatus,
