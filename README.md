@@ -1,52 +1,59 @@
-# <bindingName> Binding
+# iComfort WiFi Binding
 
-_Give some details about what this binding is meant for - a protocol, system, specific device._
+_This is a Open HAB 2 Binding for Lennox iComfort WiFi system / thermostat (Note this will not work with newer system S30/E30)._
 
-_If possible, provide some resources like pictures, a YouTube video, etc. to give an impression of what can be done with this binding. You can place such resources into a `doc` folder next to this README.md._
+_(Some additional resources will be provided later)_
 
 ## Supported Things
 
-_Please describe the different supported things / devices within this section._
-_Which different types are supported, which models were tested etc.?_
-_Note that it is planned to generate some part of this based on the XML files within ```ESH-INF/thing``` of your binding._
+_This binding supports two things:_
+_1. Thermostat display (currently under development, no Channels currently supported for the thing, Building and Owner information planned)_
+_2. Heating / Cooling Zone (multiple zones supported). Each zone supports the following types:_
+_Temperature - Current zone temperature (Read Only)_
+_Humidity - Current zone humidity (Read Only)_
+_SystemStatus - Current system status (Read Only)_
+_OperationMode - Current operation mode (Read / Write)_
+_AwayMode - Current away status (Read / Write)(Note: this is currently under development and requires testing)_
+_FanMode - Current fan mode (Read / Write)_
+_CoolSetPoint - Cool set point for the zone (Read / Write)_
+_HeatSetPoint - Heat set point for the zone (Read / Write)_
 
 ## Discovery
 
-_Describe the available auto-discovery features here. Mention for what it works and what needs to be kept in mind when using it._
+_All the Gateway systems and zones can be discovered automatically upon binding initialization and listed as things._
 
 ## Binding Configuration
 
-_If your binding requires or supports general configuration settings, please create a folder ```cfg``` and place the configuration file ```<bindingId>.cfg``` inside it. In this section, you should link to this file and provide some information about the options. The file could e.g. look like:_
+_Configuration of the Bridge required:_
 
-```
-# Configuration for the Philips Hue Binding
-#
-# Default secret key for the pairing of the Philips Hue Bridge.
-# It has to be between 10-40 (alphanumeric) characters 
-# This may be changed by the user for security reasons.
-secret=EclipseSmartHome
-```
+Username - your iComfortWiFi username used to logon to online or mobile system (https://www.myicomfort.com).
+Password - your iComfortWiFi password.
 
-_Note that it is planned to generate some part of this based on the information that is available within ```ESH-INF/binding``` of your binding._
+Optional refresh time, default set to 30 seconds.
 
-_If your binding does not offer any generic configurations, you can remove this section completely._
 
 ## Thing Configuration
 
-_Describe what is needed to manually configure a thing, either through the (Paper) UI or via a thing-file. This should be mainly about its mandatory and optional configuration parameters. A short example entry for a thing file can help!_
-
-_Note that it is planned to generate some part of this based on the XML files within ```ESH-INF/thing``` of your binding._
+_No thing configuration is required._
+_Note: I haven't test manual additon through .thing file yet, but it should work, information will be provided on later stages. Use Paper UI at the moment.
 
 ## Channels
 
-_Here you should provide information about available channel types, what their meaning is and how they can be used._
+_Temperature - Current zone temperature (Read Only)_
+_Humidity - Current zone humidity (Read Only)_
+_SystemStatus - Current system status (Read Only)_
+_OperationMode - Current operation mode (Read / Write)_
+_AwayMode - Current away status (Read / Write)(Note: this is currently under development and requires testing)_
+_FanMode - Current fan mode (Read / Write)_
+_CoolSetPoint - Cool set point for the zone (Read / Write)_
+_HeatSetPoint - Heat set point for the zone (Read / Write)_
 
-_Note that it is planned to generate some part of this based on the XML files within ```ESH-INF/thing``` of your binding._
 
 ## Full Example
 
-_Provide a full usage example based on textual configuration files (*.things, *.items, *.sitemap)._
+_(Will be provided)_
 
-## Any custom content here!
+## Foot note!
 
-_Feel free to add additional sections for whatever you think should also be mentioned about your binding!_
+_This binding is based on Nest binding and EVO Home binding, all the credits for original code goes to the original authors._
+_I also used a lot of reversed engineering done by other programmers on Internet and I have to Thank them here!_
