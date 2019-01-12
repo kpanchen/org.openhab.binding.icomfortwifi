@@ -6,9 +6,8 @@ _(Some additional resources will be provided later)_
 
 ## Supported Things
 
-This binding supports two things:
-1. Thermostat display (currently under development, no Channels currently supported for the thing, Building and Owner information planned)
-
+This binding supports two things:<br />
+1. Thermostat display (currently under development, no Channels currently supported for the thing, Building and Owner information planned)<br />
 2. Heating / Cooling Zone (multiple zones supported).
 
 
@@ -20,8 +19,8 @@ All the Gateway systems and zones can be discovered automatically upon binding i
 
 Configuration of the Bridge required:
 
-Username - your iComfortWiFi username used to logon to online or mobile system (https://www.myicomfort.com).
-`Password - your iComfortWiFi password.
+Username - your iComfortWiFi username used to logon to online or mobile system (https://www.myicomfort.com).<br />
+Password - your iComfortWiFi password.
 
 Optional refresh time, default set to 30 seconds.
 
@@ -34,14 +33,14 @@ Note: I haven't test manual additon through .thing file yet, but it should work,
 
 ## Channels
 
-`Temperature - Current zone temperature (Read Only)
-`Humidity - Current zone humidity (Read Only)
-`SystemStatus - Current system status (Read Only)
-`OperationMode - Current operation mode (Read / Write)
-`AwayMode - Current away status (Read / Write)(Note: this is currently under development and requires testing)
-`FanMode - Current fan mode (Read / Write)
-`CoolSetPoint - Cool set point for the zone (Read / Write)
-`HeatSetPoint - Heat set point for the zone (Read / Write)
+Temperature - Current zone temperature (Read Only)<br />
+Humidity - Current zone humidity (Read Only)<br />
+SystemStatus - Current system status (Read Only)<br />
+OperationMode - Current operation mode (Read / Write)<br />
+AwayMode - Current away status (Read / Write)(Note: this is currently under development and requires testing)<br />
+FanMode - Current fan mode (Read / Write)<br />
+CoolSetPoint - Cool set point for the zone (Read / Write)<br />
+HeatSetPoint - Heat set point for the zone (Read / Write)<br />
 
 
 ## Full Example
@@ -50,5 +49,5 @@ _(Will be provided)_
 
 ## Foot note!
 
-This binding is based on Nest binding and EVO Home binding, all the credits for original code goes to the original authors.
+This binding is based on Nest binding and EVO Home binding, all the credits for original code goes to the original authors.<br />
 I also used a lot of reversed engineering done by other programmers on Internet and I have to Thank them here!

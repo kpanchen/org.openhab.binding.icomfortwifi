@@ -111,7 +111,7 @@ public class ApiAccess {
     }
 
     /**
-     * Issues an HTTP request on the API's URL, using an object that is serialized to JSON as input.
+     * Issues an HTTP PUT request on the API's URL, using an object that is serialized to JSON as input.
      * Makes sure that the request is correctly formatted.*
      *
      * @param url              The URL to query
@@ -123,26 +123,17 @@ public class ApiAccess {
     }
 
     /**
-     * Issues an HTTP request on the API's URL, using an object that is serialized to JSON as input.
+     * Issues an HTTP PUT request on the API's URL, using an object that is serialized to JSON as input.
      * Makes sure that the request is correctly formatted.*
      *
-     * @param method           The HTTP method to use (POST, GET, ...)
      * @param url              The URL to query
-     * @param headers          The optional additional headers to apply, can be null
      * @param requestContainer The object to use as JSON data for the request
      * @param outClass         The type of the requested result
-     * @return The result of the request or null
      * @throws TimeoutException Thrown when a request times out
      */
-    private <TOut> TOut doRequest(HttpMethod method, String url, Map<String, String> headers, Object requestContainer,
-            Class<TOut> outClass) throws TimeoutException {
-
-        String json = null;
-        if (requestContainer != null) {
-            json = this.gson.toJson(requestContainer);
-        }
-
-        return doRequest(method, url, headers, json, "application/json", outClass);
+    public <TOut> TOut doAuthenticatedPut(String url, Object requestContainer, Class<TOut> outClass)
+            throws TimeoutException {
+        return doAuthenticatedRequest(HttpMethod.PUT, url, requestContainer, outClass);
     }
 
     /**
@@ -170,5 +161,28 @@ public class ApiAccess {
         }
 
         return doRequest(method, url, headers, requestContainer, outClass);
+    }
+
+    /**
+     * Issues an HTTP request on the API's URL, using an object that is serialized to JSON as input.
+     * Makes sure that the request is correctly formatted.*
+     *
+     * @param method           The HTTP method to use (POST, GET, ...)
+     * @param url              The URL to query
+     * @param headers          The optional additional headers to apply, can be null
+     * @param requestContainer The object to use as JSON data for the request
+     * @param outClass         The type of the requested result
+     * @return The result of the request or null
+     * @throws TimeoutException Thrown when a request times out
+     */
+    private <TOut> TOut doRequest(HttpMethod method, String url, Map<String, String> headers, Object requestContainer,
+            Class<TOut> outClass) throws TimeoutException {
+
+        String json = null;
+        if (requestContainer != null) {
+            json = this.gson.toJson(requestContainer);
+        }
+
+        return doRequest(method, url, headers, json, "application/json", outClass);
     }
 }

@@ -166,6 +166,7 @@ public class iComfortWiFiApiClient {
         ReqSetTStatInfo requestSetInfo = new ReqSetTStatInfo(zoneStatus);
         requestSetInfo.heatSetPoint = setPoint;
         apiAccess.doAuthenticatedPut(url, requestSetInfo);
+        update();
     }
 
     public void setZoneCoolingPoint(ZoneStatus zoneStatus, Double setPoint) throws TimeoutException {
@@ -173,13 +174,23 @@ public class iComfortWiFiApiClient {
         ReqSetTStatInfo requestSetInfo = new ReqSetTStatInfo(zoneStatus);
         requestSetInfo.coolSetPoint = setPoint;
         apiAccess.doAuthenticatedPut(url, requestSetInfo);
+        update();
     }
 
     public void setZoneAwayMode(ZoneStatus zoneStatus, Integer awayMode) throws TimeoutException {
         ReqSetAwayMode requestSetAway = new ReqSetAwayMode(zoneStatus);
         requestSetAway.awayMode = awayMode;
         String url = iComfortWiFiApiCommands.getCommandSetAwayModeNew(requestSetAway);
-        apiAccess.doAuthenticatedPut(url, null);
+        SystemStatus newSystemStatus = apiAccess.doAuthenticatedPut(url, null, SystemStatus.class);
+        // Updating status for changed system
+        for (int i = 0; i < systemsInfo.systemInfo.size(); i++) {
+            if (systemsInfo.systemInfo.get(i).getSystemStatus().zoneStatus.get(0).gatewaySN
+                    .equals(zoneStatus.gatewaySN)) {
+                systemsInfo.systemInfo.get(i).setSystemStatus(newSystemStatus);
+                break;
+            }
+        }
+
     }
 
     public void setZoneOperationMode(ZoneStatus zoneStatus, Integer operationMode) throws TimeoutException {
@@ -187,6 +198,7 @@ public class iComfortWiFiApiClient {
         ReqSetTStatInfo requestSetInfo = new ReqSetTStatInfo(zoneStatus);
         requestSetInfo.operationMode = operationMode;
         apiAccess.doAuthenticatedPut(url, requestSetInfo);
+        update();
     }
 
     public void setZoneFanMode(ZoneStatus zoneStatus, Integer fanMode) throws TimeoutException {
@@ -194,6 +206,7 @@ public class iComfortWiFiApiClient {
         ReqSetTStatInfo requestSetInfo = new ReqSetTStatInfo(zoneStatus);
         requestSetInfo.fanMode = fanMode;
         apiAccess.doAuthenticatedPut(url, requestSetInfo);
+        update();
     }
 
     private OwnerProfileInfo requestUserAccount(String userName) throws TimeoutException {

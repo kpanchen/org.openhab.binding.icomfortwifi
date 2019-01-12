@@ -104,14 +104,17 @@ public class iComfortWiFiBridgeHandler extends BaseBridgeHandler {
 
     public void setZoneOperationMode(ZoneStatus zoneStatus, Integer mode) {
         tryToCall(() -> apiClient.setZoneOperationMode(zoneStatus, mode));
+        updateThings();
     }
 
     public void setZoneFanMode(ZoneStatus zoneStatus, Integer mode) {
         tryToCall(() -> apiClient.setZoneFanMode(zoneStatus, mode));
+        updateThings();
     }
 
     public void setZoneAwayMode(ZoneStatus zoneStatus, Integer mode) {
         tryToCall(() -> apiClient.setZoneAwayMode(zoneStatus, mode));
+        updateThings();
     }
 
     // Set zone cool point command
@@ -127,6 +130,7 @@ public class iComfortWiFiBridgeHandler extends BaseBridgeHandler {
             }
 
         }
+        updateThings();
 
     }
 
@@ -143,6 +147,7 @@ public class iComfortWiFiBridgeHandler extends BaseBridgeHandler {
             }
 
         }
+        updateThings();
     }
 
     public void addAccountStatusListener(iComfortWiFiAccountStatusListener listener) {

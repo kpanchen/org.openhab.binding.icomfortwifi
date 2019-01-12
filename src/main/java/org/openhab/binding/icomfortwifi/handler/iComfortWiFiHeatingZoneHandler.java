@@ -89,24 +89,27 @@ public class iComfortWiFiHeatingZoneHandler extends BaseiComfortWiFiHandler {
             iComfortWiFiBridgeHandler bridge = getiComfortWiFiBridge();
             if (bridge != null) {
                 String channelId = channelUID.getId();
-                if (iComfortWiFiBindingConstants.ZONE_COOL_SET_POINT_CHANNEL.equals(channelId)
-                        && command instanceof QuantityType) {
-                    bridge.setZoneCoolingPoint(zoneStatus, ((QuantityType<Temperature>) command).doubleValue());
-
-                } else if (iComfortWiFiBindingConstants.ZONE_HEAT_SET_POINT_CHANNEL.equals(channelId)
-                        && command instanceof QuantityType) {
-                    bridge.setZoneHeatingPoint(zoneStatus, ((QuantityType<Temperature>) command).doubleValue());
-
-                } else if (iComfortWiFiBindingConstants.ZONE_OPERATION_MODE_CHANNEL.equals(channelId)) {
-                    bridge.setZoneOperationMode(zoneStatus,
-                            ZoneStatus.OperationMode.valueOf(command.toString()).getOperationModeValue());
-
-                } else if (iComfortWiFiBindingConstants.ZONE_FAN_MODE_CHANNEL.equals(channelId)) {
-                    bridge.setZoneFanMode(zoneStatus, ZoneStatus.FanMode.valueOf(command.toString()).getFanModeValue());
-
-                } else if (iComfortWiFiBindingConstants.ZONE_AWAY_MODE_CHANNEL.equals(channelId)) {
+                if (iComfortWiFiBindingConstants.ZONE_AWAY_MODE_CHANNEL.equals(channelId)) {
                     bridge.setZoneAwayMode(zoneStatus,
                             ZoneStatus.AwayStatus.valueOf(command.toString()).getAwayValue());
+                } else if (zoneStatus.awayMode == ZoneStatus.AwayStatus.AWAY_OFF) {
+                    if (iComfortWiFiBindingConstants.ZONE_COOL_SET_POINT_CHANNEL.equals(channelId)
+                            && command instanceof QuantityType) {
+                        bridge.setZoneCoolingPoint(zoneStatus, ((QuantityType<Temperature>) command).doubleValue());
+
+                    } else if (iComfortWiFiBindingConstants.ZONE_HEAT_SET_POINT_CHANNEL.equals(channelId)
+                            && command instanceof QuantityType) {
+                        bridge.setZoneHeatingPoint(zoneStatus, ((QuantityType<Temperature>) command).doubleValue());
+
+                    } else if (iComfortWiFiBindingConstants.ZONE_OPERATION_MODE_CHANNEL.equals(channelId)) {
+                        bridge.setZoneOperationMode(zoneStatus,
+                                ZoneStatus.OperationMode.valueOf(command.toString()).getOperationModeValue());
+
+                    } else if (iComfortWiFiBindingConstants.ZONE_FAN_MODE_CHANNEL.equals(channelId)) {
+                        bridge.setZoneFanMode(zoneStatus,
+                                ZoneStatus.FanMode.valueOf(command.toString()).getFanModeValue());
+
+                    }
                 }
             }
         }
