@@ -6,9 +6,9 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.openhab.binding.icomfortwifi.internal.api.models.v1.request;
+package org.openhab.binding.icomfortwifi.internal.api.models.request;
 
-import org.openhab.binding.icomfortwifi.internal.api.models.v1.response.ZoneStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus;
 
 import com.google.gson.annotations.SerializedName;
 

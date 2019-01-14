@@ -6,20 +6,18 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.openhab.binding.icomfortwifi.internal.api.models.v1.response;
-
-import java.util.ArrayList;
+package org.openhab.binding.icomfortwifi.internal.api.models.response;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Alias for a list of systems list
+ * Response model for the authentication
  *
  * @author Konstantin Panchenko - Initial contribution
  *
  */
 
-public class SystemsInfo {
+public class UserValidation {
 
     // Validation request enum
     public enum Status {
@@ -39,14 +37,10 @@ public class SystemsInfo {
         public abstract String asLowerCase();
     };
 
-    @SerializedName("ReturnStatus")
-    public String returnStatus;
+    @SerializedName("msg_code")
+    public String msgCode = "";
 
-    @SerializedName("Systems")
-    public ArrayList<SystemInfo> systemInfo;
-
-    public SystemsInfo() {
-
-    }
+    @SerializedName("msg_desc")
+    public String msgDesc = "";
 
 }
