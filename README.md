@@ -67,6 +67,7 @@ Bridge icomfortwifi:account:demoaccount "My Acoount" @ "My House" [ userName = "
 
 Items example:
 
+```
 //Zone items<br />
 Number:Temperature Thermostat_Temperature "Temperature [%.1f %unit%]" <temperature> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:Temperature"}<br />
 Number:Dimensionless Thermostat_Humudity "Humidity [%.1f %unit%]" <humidity> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:Humidity"}<br />
@@ -76,7 +77,7 @@ String Thermostat_Away_Mode "Away Mode [%s]" <heating> (gWholeHouse) {channel="i
 String Thermostat_Fan_Mode "Fan Mode [%s]" <fan> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:FanMode"}<br />
 Number:Temperature Thermostat_Cool_Point    "Cool Set Point [%.1f %unit%]" <temperature> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:CoolSetPoint"}<br />
 Number:Temperature Thermostat_Heat_Point    "Heat Set Point [%.1f %unit%]" <temperature> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:HeatSetPoint"}<br />
-
+```
 
 ## Foot note!
 
