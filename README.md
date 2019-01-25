@@ -17,19 +17,31 @@ All the Gateway systems and zones can be discovered automatically upon binding i
 
 ## Binding Configuration
 
-Configuration of the Bridge required:
+No binding configuration is required.
+
+## Thing Configuration
+
+Configuration of the Bridge thing is required:
 
 Username - your iComfortWiFi username used to logon to online or mobile system (https://www.myicomfort.com).<br />
 Password - your iComfortWiFi password.
 
 Optional refresh time, default set to 30 seconds.
 
+```
+Bridge icomfortwifi:account:demoaccount "Demo name" @ "Demo location" [ userName = "yourusername", password = "yourpassword", refreshInterval = 60] {}
+```
 
-## Thing Configuration
+Thing "Thermostat display" - no configuration required (currently unsupported).
 
-No thing configuration is required.
+Thing "Zone" - no configuration required, can be added manually or through PaperUI.<br />
+For manual addition you need to know your Gateway ID:
 
-Note: I haven't test manual additon through .thing file yet, but it should work, information will be provided on later stages. Use Paper UI at the moment
+```
+Thing zone thing_id "Demo zone name" @ "Demo zone location" [ id = "your_zone_id", name = "Main Zone" ]
+```
+
+Zone ID is a combination of Gateway ID and particular Zone ID in the way "Gateway ID_Zone ID", it is constructed automatically and you can get it from PaperUI.
 
 ## Channels
 
@@ -45,7 +57,26 @@ HeatSetPoint - Heat set point for the zone (Read / Write)<br />
 
 ## Full Example
 
-_(Will be provided)_
+Thing example:
+
+```
+Bridge icomfortwifi:account:demoaccount "My Acoount" @ "My House" [ userName = "johndoe", password = "supersecret", refreshInterval = 60] {<br />
+    Thing zone home_zone_1 "Zone 1" @ "Whole House" [ id = "WS12A34567_0", name = "Main Zone" ]<br />
+}<br />
+```
+
+Items example:
+
+//Zone items<br />
+Number:Temperature Thermostat_Temperature "Temperature [%.1f %unit%]" <temperature> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:Temperature"}<br />
+Number:Dimensionless Thermostat_Humudity "Humidity [%.1f %unit%]" <humidity> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:Humidity"}<br />
+String Thermostat_Status "System Status [%s]" <heating> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:SystemStatus"}<br />
+String Thermostat_Mode "Operation Mode [%s]" <heating> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:OperationMode"}<br />
+String Thermostat_Away_Mode "Away Mode [%s]" <heating> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:AwayMode"}<br />
+String Thermostat_Fan_Mode "Fan Mode [%s]" <fan> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:FanMode"}<br />
+Number:Temperature Thermostat_Cool_Point    "Cool Set Point [%.1f %unit%]" <temperature> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:CoolSetPoint"}<br />
+Number:Temperature Thermostat_Heat_Point    "Heat Set Point [%.1f %unit%]" <temperature> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:HeatSetPoint"}<br />
+
 
 ## Foot note!
 
