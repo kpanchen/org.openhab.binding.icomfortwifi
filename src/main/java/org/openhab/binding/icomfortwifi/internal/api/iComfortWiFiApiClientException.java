@@ -16,6 +16,8 @@ package org.openhab.binding.icomfortwifi.internal.api;
  */
 public class iComfortWiFiApiClientException extends Exception {
 
+    private static final long serialVersionUID = 9991L;
+
     public iComfortWiFiApiClientException() {
     }
 

@@ -9,7 +9,6 @@
 package org.openhab.binding.icomfortwifi.handler;
 
 import javax.measure.quantity.Temperature;
-//import javax.measure.quantity.Time;
 
 import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.types.StringType;
@@ -23,6 +22,8 @@ import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.icomfortwifi.iComfortWiFiBindingConstants;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The {@link iComfortWiFiHeatingZoneHandler} is responsible for handling commands, which are
@@ -32,6 +33,7 @@ import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus;
  */
 public class iComfortWiFiHeatingZoneHandler extends BaseiComfortWiFiHandler {
 
+    private final Logger logger = LoggerFactory.getLogger(iComfortWiFiHeatingZoneHandler.class);
     // private static final int CANCEL_SET_POINT_OVERRIDE = 0;
     private ThingStatus tcsStatus;
     private ZoneStatus zoneStatus;
@@ -82,6 +84,9 @@ public class iComfortWiFiHeatingZoneHandler extends BaseiComfortWiFiHandler {
     @SuppressWarnings("unchecked")
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
+        logger.debug("Entering Heating Zone Handler for Gateway {}, zone {}", zoneStatus.gatewaySN,
+                zoneStatus.zoneNumber);
+        logger.debug("Executing command {}", command.toString());
 
         if (command == RefreshType.REFRESH) {
             update(tcsStatus, zoneStatus);
@@ -93,6 +98,7 @@ public class iComfortWiFiHeatingZoneHandler extends BaseiComfortWiFiHandler {
                     bridge.setZoneAwayMode(zoneStatus,
                             ZoneStatus.AwayStatus.valueOf(command.toString()).getAwayValue());
                 } else if (zoneStatus.awayMode == ZoneStatus.AwayStatus.AWAY_OFF) {
+                    logger.debug("Zone is not in Away mode, executing the command");
                     if (iComfortWiFiBindingConstants.ZONE_COOL_SET_POINT_CHANNEL.equals(channelId)
                             && command instanceof QuantityType) {
                         bridge.setZoneCoolingPoint(zoneStatus, ((QuantityType<Temperature>) command).doubleValue());
@@ -110,6 +116,8 @@ public class iComfortWiFiHeatingZoneHandler extends BaseiComfortWiFiHandler {
                                 ZoneStatus.FanMode.valueOf(command.toString()).getFanModeValue());
 
                     }
+                } else {
+                    logger.debug("Zone is in Away mode, not executing the command");
                 }
             }
         }
