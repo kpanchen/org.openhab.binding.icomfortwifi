@@ -44,7 +44,7 @@ public class ReqSetTStatInfo {
         this.heatSetPoint = zoneStatus.heatSetPoint;
         this.fanMode = zoneStatus.fanMode.getFanModeValue();
         this.operationMode = zoneStatus.operationMode.getOperationModeValue();
-        this.prefTempUnits = zoneStatus.prefTempUnits.getTempUnitsValue();
+        this.prefTempUnits = zoneStatus.preferredTemperatureUnit.getTempUnitsValue();
         this.zoneNumber = zoneStatus.zoneNumber;
         this.gatewaySN = zoneStatus.gatewaySN;
     }

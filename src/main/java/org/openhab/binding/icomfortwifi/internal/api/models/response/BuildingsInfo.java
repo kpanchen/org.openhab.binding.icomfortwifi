@@ -10,6 +10,8 @@ package org.openhab.binding.icomfortwifi.internal.api.models.response;
 
 import java.util.ArrayList;
 
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.RequestStatus;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -21,26 +23,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class BuildingsInfo {
 
-    // Validation request enum
-    public enum Status {
-        SUCCESS {
-            @Override
-            public String asLowerCase() {
-                return SUCCESS.toString().toLowerCase();
-            }
-        },
-        FAILURE {
-            @Override
-            public String asLowerCase() {
-                return FAILURE.toString().toLowerCase();
-            }
-        };
-
-        public abstract String asLowerCase();
-    };
-
     @SerializedName("ReturnStatus")
-    public String returnStatus;
+    public RequestStatus returnStatus;
 
     @SerializedName("Buildings")
     public ArrayList<Building> buildingInfo;

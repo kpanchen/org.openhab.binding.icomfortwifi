@@ -92,7 +92,7 @@ public class iComfortWiFiDiscoveryService extends AbstractDiscoveryService
 
         for (SystemInfo systemInfo : bridge.getiComfortWiFiSystemsInfo().systemInfo) {
             addSystemDiscoveryResult(systemInfo);
-            for (ZoneStatus zone : systemInfo.getSystemStatus().zoneStatus) {
+            for (ZoneStatus zone : systemInfo.getZonesStatus().zoneStatus) {
                 addZoneDiscoveryResult(systemInfo.systemName, zone);
             }
         }

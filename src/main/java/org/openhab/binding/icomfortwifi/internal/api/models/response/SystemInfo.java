@@ -44,14 +44,14 @@ public class SystemInfo {
     @SerializedName("System_Name")
     public String systemName;
 
-    private SystemStatus systemStatus;
+    private ZonesStatus zonesStatus;
 
-    public SystemStatus getSystemStatus() {
-        return systemStatus;
+    public ZonesStatus getZonesStatus() {
+        return zonesStatus;
     }
 
-    public void setSystemStatus(SystemStatus systemStatus) {
-        this.systemStatus = systemStatus;
+    public void setZonesStatus(ZonesStatus zonesStatus) {
+        this.zonesStatus = zonesStatus;
     }
 
     private GatewayInfo gatewayInfo;

@@ -287,7 +287,7 @@ public final class iComfortWiFiApiCommands {
                 .append("&")
                 .append(setAwayModeNew.paramsDef.TEMP_SCALE)
                 .append("=")
-                .append(reqSetAway.prefTempUnits.toString());
+                .append(reqSetAway.preferredTemperatureUnit.toString());
         // @formatter:on
         return urlBuilder.toString();
     }

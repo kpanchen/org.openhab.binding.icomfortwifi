@@ -22,13 +22,14 @@ import org.eclipse.jetty.util.StringUtil;
 import org.openhab.binding.icomfortwifi.internal.api.models.request.ReqSetAwayMode;
 import org.openhab.binding.icomfortwifi.internal.api.models.request.ReqSetTStatInfo;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.BuildingsInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.RequestStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.TempUnits;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.GatewayInfo;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.OwnerProfileInfo;
-import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemStatus;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemsInfo;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.UserValidation;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus;
-import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus.TempUnits;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.ZonesStatus;
 import org.openhab.binding.icomfortwifi.internal.configuration.iComfortWiFiBridgeConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,15 +125,23 @@ public class iComfortWiFiApiClient {
 
     public void update() {
         try {
-            if (systemsInfo.returnStatus.toLowerCase().equals(SystemsInfo.Status.SUCCESS.asLowerCase())) {
+            if (systemsInfo.returnStatus.equals(RequestStatus.SUCCESS)) {
                 for (int i = 0; i < systemsInfo.systemInfo.size(); i++) {
-                    SystemStatus systemStatus = requestSystemStatus(systemsInfo.systemInfo.get(i).gatewaySN);
-                    GatewayInfo gatewayInfo = requestGatewayInfo(systemsInfo.systemInfo.get(i).gatewaySN);
-                    if (systemStatus.returnStatus.toLowerCase().equals(SystemStatus.Status.SUCCESS.asLowerCase())) {
-                        systemsInfo.systemInfo.get(i).setSystemStatus(systemStatus);
+                    // This is to get initial Temperature Unit
+                    if (systemsInfo.systemInfo.get(i).getGatewayInfo() == null) {
+                        GatewayInfo gatewayInfo = requestGatewayInfo(systemsInfo.systemInfo.get(i).gatewaySN,
+                                TempUnits.CELSIUS);
+                        systemsInfo.systemInfo.get(i).setGetewayInfo(gatewayInfo);
+                    }
+                    GatewayInfo gatewayInfo = requestGatewayInfo(systemsInfo.systemInfo.get(i).gatewaySN,
+                            systemsInfo.systemInfo.get(i).getGatewayInfo().preferredTemperatureUnit);
+                    ZonesStatus zonesStatus = requestZonesStatus(systemsInfo.systemInfo.get(i).gatewaySN,
+                            systemsInfo.systemInfo.get(i).getGatewayInfo().preferredTemperatureUnit);
+                    if (zonesStatus.returnStatus.equals(RequestStatus.SUCCESS)) {
+                        systemsInfo.systemInfo.get(i).setZonesStatus(zonesStatus);
                         systemsInfo.systemInfo.get(i).setGetewayInfo(gatewayInfo);
                     } else {
-                        systemsInfo.systemInfo.get(i).setSystemStatus(null);
+                        systemsInfo.systemInfo.get(i).setZonesStatus(null);
                         systemsInfo.systemInfo.get(i).setGetewayInfo(null);
                     }
                 }
@@ -181,12 +190,12 @@ public class iComfortWiFiApiClient {
         ReqSetAwayMode requestSetAway = new ReqSetAwayMode(zoneStatus);
         requestSetAway.awayMode = awayMode;
         String url = iComfortWiFiApiCommands.getCommandSetAwayModeNew(requestSetAway);
-        SystemStatus newSystemStatus = apiAccess.doAuthenticatedPut(url, null, SystemStatus.class);
+        ZonesStatus newZonesStatus = apiAccess.doAuthenticatedPut(url, null, ZonesStatus.class);
         // Updating status for changed system
         for (int i = 0; i < systemsInfo.systemInfo.size(); i++) {
-            if (systemsInfo.systemInfo.get(i).getSystemStatus().zoneStatus.get(0).gatewaySN
+            if (systemsInfo.systemInfo.get(i).getZonesStatus().zoneStatus.get(0).gatewaySN
                     .equals(zoneStatus.gatewaySN)) {
-                systemsInfo.systemInfo.get(i).setSystemStatus(newSystemStatus);
+                systemsInfo.systemInfo.get(i).setZonesStatus(newZonesStatus);
                 break;
             }
         }
@@ -224,14 +233,13 @@ public class iComfortWiFiApiClient {
         return apiAccess.doAuthenticatedGet(url, SystemsInfo.class);
     }
 
-    private SystemStatus requestSystemStatus(String gatewaySN) throws TimeoutException {
-        String url = iComfortWiFiApiCommands.getCommandGetTStatInfoList(gatewaySN,
-                TempUnits.CELSIUS.getTempUnitsValue());
-        return apiAccess.doAuthenticatedGet(url, SystemStatus.class);
+    private ZonesStatus requestZonesStatus(String gatewaySN, TempUnits tempUnit) throws TimeoutException {
+        String url = iComfortWiFiApiCommands.getCommandGetTStatInfoList(gatewaySN, tempUnit.getTempUnitsValue());
+        return apiAccess.doAuthenticatedGet(url, ZonesStatus.class);
     }
 
-    private GatewayInfo requestGatewayInfo(String gatewaySN) throws TimeoutException {
-        String url = iComfortWiFiApiCommands.getCommandGetGatewayInfo(gatewaySN, TempUnits.CELSIUS.getTempUnitsValue());
+    private GatewayInfo requestGatewayInfo(String gatewaySN, TempUnits tempUnit) throws TimeoutException {
+        String url = iComfortWiFiApiCommands.getCommandGetGatewayInfo(gatewaySN, tempUnit.getTempUnitsValue());
         return apiAccess.doAuthenticatedGet(url, GatewayInfo.class);
     }
 
@@ -263,8 +271,7 @@ public class iComfortWiFiApiClient {
             logger.error("Credential conversion failed", e);
         }
 
-        if (validation != null
-                && validation.msgCode.toLowerCase().equals(UserValidation.Status.SUCCESS.asLowerCase())) {
+        if (validation != null && validation.msgCode.equals(RequestStatus.SUCCESS)) {
             apiAccess.setUserCredentials(basicAuthentication);
             return true;
         } else {

@@ -8,6 +8,8 @@
  */
 package org.openhab.binding.icomfortwifi.internal.api.models.response;
 
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.RequestStatus;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -40,7 +42,7 @@ public class OwnerProfileInfo {
     public Boolean registrationComplete;
 
     @SerializedName("ReturnStatus")
-    public String returnStatus;
+    public RequestStatus returnStatus;
 
     @SerializedName("TCInComplete")
     public Boolean tcInComplete;

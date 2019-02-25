@@ -33,7 +33,7 @@ public class ReqSetAwayMode {
     @SerializedName("FanMode")
     public Integer fanMode = 0;
     @SerializedName("TempScale")
-    public String prefTempUnits = null;
+    public String preferredTemperatureUnit = null;
 
     public ReqSetAwayMode() {
 
@@ -46,7 +46,7 @@ public class ReqSetAwayMode {
         this.heatSetPoint = zoneStatus.heatSetPoint;
         this.coolSetPoint = zoneStatus.coolSetPoint;
         this.fanMode = zoneStatus.fanMode.getFanModeValue();
-        this.prefTempUnits = zoneStatus.prefTempUnits.getTempUnitsValue();
+        this.preferredTemperatureUnit = zoneStatus.preferredTemperatureUnit.getTempUnitsValue();
     }
 
 }

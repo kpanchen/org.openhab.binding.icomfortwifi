@@ -8,6 +8,15 @@
  */
 package org.openhab.binding.icomfortwifi.internal.api.models.response;
 
+import java.util.Date;
+
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.AwayStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.ConnectionStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.FanMode;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.OperationMode;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.SystemStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.TempUnits;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -26,13 +35,13 @@ public class ZoneStatus {
     public Integer centralZonedAway;
 
     @SerializedName("ConnectionStatus")
-    public String connectionStatus;
+    public ConnectionStatus connectionStatus;
 
     @SerializedName("Cool_Set_Point")
     public Double coolSetPoint;
 
     @SerializedName("DateTime_Mark")
-    public String dateTimeMark;
+    public Date dateTimeMark;
 
     @SerializedName("Fan_Mode")
     public FanMode fanMode;
@@ -59,7 +68,7 @@ public class ZoneStatus {
     public OperationMode operationMode;
 
     @SerializedName("Pref_Temp_Units")
-    public TempUnits prefTempUnits;
+    public TempUnits preferredTemperatureUnit;
 
     @SerializedName("Program_Schedule_Mode")
     public String programScheduleMode;
@@ -96,108 +105,6 @@ public class ZoneStatus {
 
     public String getZoneID() {
         return gatewaySN + "_" + zoneNumber.toString();
-    }
-
-    public enum OperationMode {
-        @SerializedName("2")
-        COOL_ONLY(2),
-        @SerializedName("1")
-        HEAT_ONLY(1),
-        @SerializedName("3")
-        HEAT_OR_COOL(3),
-        @SerializedName("0")
-        OFF(0),
-        UNKNOWN(-1);
-
-        private Integer operationModeValue;
-
-        private OperationMode(Integer operationModeValue) {
-            this.operationModeValue = operationModeValue;
-        }
-
-        public Integer getOperationModeValue() {
-            return this.operationModeValue;
-        }
-    }
-
-    public enum SystemStatus {
-        @SerializedName("0")
-        IDLE(0),
-        @SerializedName("1")
-        HEATING(1),
-        @SerializedName("2")
-        COOLING(2),
-        @SerializedName("3")
-        WAITING(3),
-        @SerializedName("4")
-        EMERGENCY_HEAT(4),
-        UNKNOWN(-1);
-
-        private Integer systemStatusValue;
-
-        private SystemStatus(Integer systemStatusValue) {
-            this.systemStatusValue = systemStatusValue;
-        }
-
-        public Integer getSystemStatusValue() {
-            return this.systemStatusValue;
-        }
-    }
-
-    public enum AwayStatus {
-        @SerializedName("0")
-        AWAY_OFF(0),
-        @SerializedName("1")
-        AWAY_ON(1),
-        UNKNOWN(-1);
-
-        private Integer awayValue;
-
-        private AwayStatus(Integer awayValue) {
-            this.awayValue = awayValue;
-        }
-
-        public Integer getAwayValue() {
-            return this.awayValue;
-        }
-    }
-
-    public enum FanMode {
-        @SerializedName("0")
-        AUTO(0),
-        @SerializedName("1")
-        ON(1),
-        @SerializedName("2")
-        CIRCULATE(2),
-        UNKNOWN(-1);
-
-        private Integer fanModeValue;
-
-        private FanMode(Integer fanModeValue) {
-            this.fanModeValue = fanModeValue;
-        }
-
-        public Integer getFanModeValue() {
-            return this.fanModeValue;
-        }
-    }
-
-    public enum TempUnits {
-        @SerializedName("0")
-        FAHRENHEIT("0"),
-        @SerializedName("1")
-        CELSIUS("1"),
-        UNKNOWN("unknown");
-
-        private String tempUnitsValue;
-
-        private TempUnits(String tempUnitsValue) {
-            this.tempUnitsValue = tempUnitsValue;
-        }
-
-        public String getTempUnitsValue() {
-            return this.tempUnitsValue;
-        }
     }
 
 }

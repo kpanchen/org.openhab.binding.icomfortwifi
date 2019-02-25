@@ -8,6 +8,10 @@
  */
 package org.openhab.binding.icomfortwifi.internal.api.models.response;
 
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.PrefferedLanguage;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.RequestStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.TempUnits;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -18,28 +22,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class GatewayInfo {
 
-    // Validation request enum
-    public enum Status {
-        SUCCESS {
-            @Override
-            public String asLowerCase() {
-                return SUCCESS.toString().toLowerCase();
-            }
-        },
-        FAILURE {
-            @Override
-            public String asLowerCase() {
-                return FAILURE.toString().toLowerCase();
-            }
-        };
-
-        public abstract String asLowerCase();
-    };
-
-    public GatewayInfo() {
-
-    }
-
     @SerializedName("Cool_Set_Point_High_Limit")
     public Double coolSetPointHighLimit;
 
@@ -48,9 +30,6 @@ public class GatewayInfo {
 
     @SerializedName("Daylight_Savings_Time")
     public Integer daylightSavingsTime;
-
-    @SerializedName("RegistrationCompleteFlag")
-    public Boolean registrationCompleteFlag;
 
     @SerializedName("Heat_Cool_Dead_Band")
     public Double heatCoolDeadBand;
@@ -62,13 +41,13 @@ public class GatewayInfo {
     public Double heatSetPointLowLimit;
 
     @SerializedName("Pref_Language_Nbr")
-    public Integer prefferedLanguageNumber;
+    public PrefferedLanguage prefferedLanguage;
 
     @SerializedName("Pref_Temp_Unit")
-    public String prefferedTemperatureUnit;
+    public TempUnits preferredTemperatureUnit;
 
     @SerializedName("ReturnStatus")
-    public String returnStatus;
+    public RequestStatus returnStatus;
 
     @SerializedName("SystemID")
     public Integer systemID;

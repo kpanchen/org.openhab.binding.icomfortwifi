@@ -241,7 +241,7 @@ public class iComfortWiFiBridgeHandler extends BaseBridgeHandler {
         // Creating lookup tables
         for (SystemInfo systemInfo : apiClient.getSystemsInfo().systemInfo) {
             idToTcsMap.put(systemInfo.gatewaySN, systemInfo);
-            for (ZoneStatus zoneStatus : systemInfo.getSystemStatus().zoneStatus) {
+            for (ZoneStatus zoneStatus : systemInfo.getZonesStatus().zoneStatus) {
                 idToZoneMap.put(zoneStatus.getZoneID(), zoneStatus);
                 zoneIdToTcsIdMap.put(zoneStatus.getZoneID(), systemInfo.gatewaySN);
             }

@@ -8,6 +8,7 @@
  */
 package org.openhab.binding.icomfortwifi.internal.api;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -20,6 +21,7 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.StringContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.JsonDateDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +42,9 @@ public class ApiAccess {
     private final Gson gson;
 
     public ApiAccess(HttpClient httpClient) {
-        this.gson = new GsonBuilder().create();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Date.class, new JsonDateDeserializer());
+        this.gson = gsonBuilder.create();
         this.httpClient = httpClient;
     }
 
@@ -87,7 +91,7 @@ public class ApiAccess {
                 String reply = response.getContentAsString();
 
                 if (outClass != null) {
-                    retVal = new Gson().fromJson(reply, outClass);
+                    retVal = this.gson.fromJson(reply, outClass);
                 }
             }
         } catch (InterruptedException | ExecutionException e) {
