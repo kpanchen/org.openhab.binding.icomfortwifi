@@ -79,6 +79,18 @@ Number:Temperature Thermostat_Cool_Point    "Cool Set Point [%.1f %unit%]" <temp
 Number:Temperature Thermostat_Heat_Point    "Heat Set Point [%.1f %unit%]" <temperature> (gWholeHouse) {channel="icomfortwifi:zone:demoaccount:home_zone_1:HeatSetPoint"}
 ```
 
+Sitemap example:
+```
+Text item=Thermostat_Temperature
+Text item=Thermostat_Humudity
+Text item=Thermostat_Status
+Selection  item=Thermostat_Mode mappings=[IDLE=System is idle", HEATING="System is heating", COOLING="System is cooling", WAITING="System is waiting", EMERGENCY_HEAT="System is emergency heating"]
+Switch item=Thermostat_Away_Mode mappings=[AWAY_ON="Away", AWAY_OFF="Not Away"]
+Selection  item=Thermostat_Fan_Mode mappings=[AUTO="Auto", ON="On", CIRCULATE="Circulate"]
+Setpoint item=Thermostat_Cool_Point
+Setpoint item=Thermostat_Heat_Point
+```
+
 ## Foot note!
 
 This binding is based on Nest binding and EVO Home binding, all the credits for original code goes to the original authors.<br />
