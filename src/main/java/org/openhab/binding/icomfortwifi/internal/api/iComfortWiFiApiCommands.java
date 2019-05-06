@@ -137,6 +137,22 @@ public final class iComfortWiFiApiCommands {
         }
     }
 
+    private final static class getGatewaysAlerts {
+        private static final String PATH = "/GetGatewaysAlerts";
+
+        private final class paramsDef {
+            private static final String GATEWAY_SN = "gatewaysn";
+            private static final String LANGUAGE_NBR = "lang_nbr";
+            private static final String COUNT = "count";
+
+            private paramsDef() {
+            }
+        }
+
+        private getGatewaysAlerts() {
+        }
+    }
+
     private final static class setAwayModeNew {
         private static final String PATH = "/SetAwayModeNew";
 
@@ -296,6 +312,26 @@ public final class iComfortWiFiApiCommands {
         // @formatter:off
         StringBuilder urlBuilder = new StringBuilder((new iComfortServiceURI()).getURI())
                 .append(setTStatInfo.PATH);
+        // @formatter:on
+        return urlBuilder.toString();
+    }
+
+    public static String getCommandGetGatewaysAlerts(String gatewaySN, String languageNbr, String count) {
+        // @formatter:off
+        StringBuilder urlBuilder = new StringBuilder((new iComfortServiceURI()).getURI())
+                .append(getGatewaysAlerts.PATH)
+                .append("?")
+                .append(getGatewaysAlerts.paramsDef.GATEWAY_SN)
+                .append("=")
+                .append(gatewaySN)
+                .append("&")
+                .append(getGatewaysAlerts.paramsDef.LANGUAGE_NBR)
+                .append("=")
+                .append(languageNbr)
+                .append("&")
+                .append(getGatewaysAlerts.paramsDef.COUNT)
+                .append("=")
+                .append(count);
         // @formatter:on
         return urlBuilder.toString();
     }

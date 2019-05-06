@@ -64,6 +64,16 @@ public class SystemInfo {
         this.gatewayInfo = gatewayInfo;
     }
 
+    private GatewaysAlerts gatewaysAlerts;
+
+    public GatewaysAlerts getGatewaysAlerts() {
+        return gatewaysAlerts;
+    }
+
+    public void setGetewaysAlerts(GatewaysAlerts gatewaysAlerts) {
+        this.gatewaysAlerts = gatewaysAlerts;
+    }
+
     public boolean hasActiveFaults() { // Always return false, implemented for compatibility and future use.
         return false;
     }

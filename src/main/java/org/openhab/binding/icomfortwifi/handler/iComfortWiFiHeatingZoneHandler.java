@@ -8,6 +8,7 @@
  */
 package org.openhab.binding.icomfortwifi.handler;
 
+import javax.measure.Unit;
 import javax.measure.quantity.Temperature;
 
 import org.eclipse.smarthome.core.library.types.QuantityType;
@@ -23,6 +24,7 @@ import org.openhab.binding.icomfortwifi.iComfortWiFiBindingConstants;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.AwayStatus;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.FanMode;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.OperationMode;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.TempUnits;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +97,14 @@ public class iComfortWiFiHeatingZoneHandler extends BaseiComfortWiFiHandler {
 
             iComfortWiFiBridgeHandler bridge = getiComfortWiFiBridge();
             if (bridge != null) {
+                // Accommodating the case where Framework units are different from back end.
+                if (command instanceof QuantityType) {
+                    Unit<Temperature> tempUnit = ((QuantityType<Temperature>) command).getUnit();
+                    if (tempUnit != zoneStatus.preferredTemperatureUnit.getTemperatureUnit()) {
+                        bridge.setAlternateTemperatureUnit(TempUnits.getCustomTemperatureUnit(tempUnit));
+                    }
+                }
+
                 String channelId = channelUID.getId();
                 if (iComfortWiFiBindingConstants.ZONE_AWAY_MODE_CHANNEL.equals(channelId)) {
                     bridge.setZoneAwayMode(zoneStatus, AwayStatus.valueOf(command.toString()).getAwayValue());

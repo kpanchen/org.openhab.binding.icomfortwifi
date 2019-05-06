@@ -22,9 +22,11 @@ import org.eclipse.jetty.util.StringUtil;
 import org.openhab.binding.icomfortwifi.internal.api.models.request.ReqSetAwayMode;
 import org.openhab.binding.icomfortwifi.internal.api.models.request.ReqSetTStatInfo;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.BuildingsInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.PrefferedLanguage;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.RequestStatus;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.TempUnits;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.GatewayInfo;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.GatewaysAlerts;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.OwnerProfileInfo;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemsInfo;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.UserValidation;
@@ -50,6 +52,8 @@ public class iComfortWiFiApiClient {
     private BuildingsInfo buildingsInfo = new BuildingsInfo();
     private OwnerProfileInfo ownerProfileInfo = new OwnerProfileInfo();
     private SystemsInfo systemsInfo = new SystemsInfo();
+
+    private final Integer alertsCount = 20;
 
     /**
      * Creates a new API client based on the V1 API interface
@@ -131,18 +135,89 @@ public class iComfortWiFiApiClient {
                     if (systemsInfo.systemInfo.get(i).getGatewayInfo() == null) {
                         GatewayInfo gatewayInfo = requestGatewayInfo(systemsInfo.systemInfo.get(i).gatewaySN,
                                 TempUnits.CELSIUS);
-                        systemsInfo.systemInfo.get(i).setGetewayInfo(gatewayInfo);
+                        if (gatewayInfo.returnStatus.equals(RequestStatus.SUCCESS)) {
+                            systemsInfo.systemInfo.get(i).setGetewayInfo(gatewayInfo);
+                        } else {
+                            continue;
+                        }
                     }
+                    // Getting Gateway Information
+                    TempUnits prefTempCurrent = systemsInfo.systemInfo.get(i).getGatewayInfo().preferredTemperatureUnit;
                     GatewayInfo gatewayInfo = requestGatewayInfo(systemsInfo.systemInfo.get(i).gatewaySN,
-                            systemsInfo.systemInfo.get(i).getGatewayInfo().preferredTemperatureUnit);
-                    ZonesStatus zonesStatus = requestZonesStatus(systemsInfo.systemInfo.get(i).gatewaySN,
-                            systemsInfo.systemInfo.get(i).getGatewayInfo().preferredTemperatureUnit);
-                    if (zonesStatus.returnStatus.equals(RequestStatus.SUCCESS)) {
-                        systemsInfo.systemInfo.get(i).setZonesStatus(zonesStatus);
+                            prefTempCurrent);
+                    if (gatewayInfo.returnStatus.equals(RequestStatus.SUCCESS)) {
+                        // Ignoring preferred temperature unit provided by the system
+                        // in case they were changed from Framework
+                        gatewayInfo.preferredTemperatureUnit = prefTempCurrent;
                         systemsInfo.systemInfo.get(i).setGetewayInfo(gatewayInfo);
                     } else {
                         systemsInfo.systemInfo.get(i).setZonesStatus(null);
                         systemsInfo.systemInfo.get(i).setGetewayInfo(null);
+                        continue;
+                    }
+                    // Getting alerts
+                    GatewaysAlerts gatewaysAlerts = requestGatewaysAlerts(systemsInfo.systemInfo.get(i).gatewaySN,
+                            systemsInfo.systemInfo.get(i).getGatewayInfo().prefferedLanguage, alertsCount);
+                    if (gatewaysAlerts.returnStatus.equals(RequestStatus.SUCCESS)) {
+                        systemsInfo.systemInfo.get(i).setGetewaysAlerts(gatewaysAlerts);
+                    } else {
+                        systemsInfo.systemInfo.get(i).setGetewaysAlerts(null);
+                    }
+                    // Getting Zones Status
+                    ZonesStatus zonesStatus = requestZonesStatus(systemsInfo.systemInfo.get(i).gatewaySN,
+                            prefTempCurrent);
+                    if (zonesStatus.returnStatus.equals(RequestStatus.SUCCESS)) {
+                        for (int j = 0; j < zonesStatus.zoneStatus.size(); j++) {
+                            // Same as for gateway
+                            zonesStatus.zoneStatus.get(i).preferredTemperatureUnit = prefTempCurrent;
+                        }
+                        systemsInfo.systemInfo.get(i).setZonesStatus(zonesStatus);
+                    } else {
+                        systemsInfo.systemInfo.get(i).setZonesStatus(null);
+                        systemsInfo.systemInfo.get(i).setGetewayInfo(null);
+                        continue;
+                    }
+                }
+            }
+        } catch (TimeoutException e) {
+            logger.info("Timeout on update");
+        }
+    }
+
+    // Request update with provided tempUnit
+    public void update(TempUnits tempUnit) {
+        try {
+            if (systemsInfo.returnStatus.equals(RequestStatus.SUCCESS)) {
+                for (int i = 0; i < systemsInfo.systemInfo.size(); i++) {
+                    // Getting Gateway Information
+                    GatewayInfo gatewayInfo = requestGatewayInfo(systemsInfo.systemInfo.get(i).gatewaySN, tempUnit);
+                    if (gatewayInfo.returnStatus.equals(RequestStatus.SUCCESS)) {
+                        gatewayInfo.preferredTemperatureUnit = tempUnit;
+                        systemsInfo.systemInfo.get(i).setGetewayInfo(gatewayInfo);
+                    } else {
+                        systemsInfo.systemInfo.get(i).setGetewayInfo(null);
+                        systemsInfo.systemInfo.get(i).setZonesStatus(null);
+                        continue;
+                    }
+                    // Getting alerts
+                    GatewaysAlerts gatewaysAlerts = requestGatewaysAlerts(systemsInfo.systemInfo.get(i).gatewaySN,
+                            systemsInfo.systemInfo.get(i).getGatewayInfo().prefferedLanguage, alertsCount);
+                    if (gatewaysAlerts.returnStatus.equals(RequestStatus.SUCCESS)) {
+                        systemsInfo.systemInfo.get(i).setGetewaysAlerts(gatewaysAlerts);
+                    } else {
+                        systemsInfo.systemInfo.get(i).setGetewaysAlerts(null);
+                    }
+                    // Getting Zones Status
+                    ZonesStatus zonesStatus = requestZonesStatus(systemsInfo.systemInfo.get(i).gatewaySN, tempUnit);
+                    if (zonesStatus.returnStatus.equals(RequestStatus.SUCCESS)) {
+                        for (int j = 0; j < zonesStatus.zoneStatus.size(); j++) {
+                            zonesStatus.zoneStatus.get(i).preferredTemperatureUnit = tempUnit;
+                        }
+                        systemsInfo.systemInfo.get(i).setZonesStatus(zonesStatus);
+                    } else {
+                        systemsInfo.systemInfo.get(i).setZonesStatus(null);
+                        systemsInfo.systemInfo.get(i).setGetewayInfo(null);
+                        continue;
                     }
                 }
             }
@@ -241,6 +316,13 @@ public class iComfortWiFiApiClient {
     private GatewayInfo requestGatewayInfo(String gatewaySN, TempUnits tempUnit) throws TimeoutException {
         String url = iComfortWiFiApiCommands.getCommandGetGatewayInfo(gatewaySN, tempUnit.getTempUnitsValue());
         return apiAccess.doAuthenticatedGet(url, GatewayInfo.class);
+    }
+
+    private GatewaysAlerts requestGatewaysAlerts(String gatewaySN, PrefferedLanguage languageNbr, Integer count)
+            throws TimeoutException {
+        String url = iComfortWiFiApiCommands.getCommandGetGatewaysAlerts(gatewaySN,
+                languageNbr.getPrefferedLanguageValue().toString(), count.toString());
+        return apiAccess.doAuthenticatedGet(url, GatewaysAlerts.class);
     }
 
     // User name and Password from configuration validation

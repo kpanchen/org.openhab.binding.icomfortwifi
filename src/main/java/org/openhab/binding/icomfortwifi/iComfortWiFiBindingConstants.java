@@ -51,6 +51,19 @@ public class iComfortWiFiBindingConstants {
     public static final String ZONE_COOL_SET_POINT_CHANNEL = "CoolSetPoint";
     public static final String ZONE_HEAT_SET_POINT_CHANNEL = "HeatSetPoint";
 
+    // TCS Channels
+    public static final String TCS_ALARM_DESCRIPTION_CHANNEL = "alertsAndReminders#AlarmDescription";
+    public static final String TCS_ALARM_NBR_CHANNEL = "alertsAndReminders#AlarmNbr";
+    public static final String TCS_ALARM_TYPE_CHANNEL = "alertsAndReminders#AlarmType";
+    public static final String TCS_ALARM_STATUS_CHANNEL = "alertsAndReminders#AlarmStatus";
+    public static final String TCS_ALARM_DATE_TIME_SET_CHANNEL = "alertsAndReminders#DateTimeSet";
+    public static final String TCS_ALARM_ALERT_NUMBER = "alertsAndReminders#AlertNumber";
+
+    // TCS Properties
+    public static final String TCS_PROPERTY_SYSTEM_NAME = "systemName";
+    public static final String TCS_PROPERTY_GATEWAY_SN = "gatewaySerialNumber";
+    public static final String TCS_PROPERTY_FIRMWARE_VERSION = "firmwareVersion";
+
     // List of Discovery properties
     public static final String PROPERTY_ID = "id";
     public static final String PROPERTY_NAME = "name";

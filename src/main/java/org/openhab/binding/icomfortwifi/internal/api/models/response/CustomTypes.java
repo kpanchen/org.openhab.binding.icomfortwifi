@@ -45,6 +45,16 @@ public class CustomTypes {
                     return null;
             }
         }
+
+        public static TempUnits getCustomTemperatureUnit(Unit<Temperature> tempUnit) {
+            if (tempUnit == ImperialUnits.FAHRENHEIT) {
+                return FAHRENHEIT;
+            } else if (tempUnit == SIUnits.CELSIUS) {
+                return CELSIUS;
+            } else {
+                return null;
+            }
+        }
     }
 
     public enum OperationMode {
@@ -156,6 +166,24 @@ public class CustomTypes {
 
         public Integer getPrefferedLanguageValue() {
             return this.prefferedLanguage;
+        }
+    }
+
+    public enum AlertStatus {
+        @SerializedName("0")
+        ALERT_CLEARED(0),
+        @SerializedName("1")
+        ALERT_RAISED(1),
+        UNKNOWN(-1);
+
+        private Integer alertValue;
+
+        private AlertStatus(Integer alertValue) {
+            this.alertValue = alertValue;
+        }
+
+        public Integer getAlertValue() {
+            return this.alertValue;
         }
     }
 

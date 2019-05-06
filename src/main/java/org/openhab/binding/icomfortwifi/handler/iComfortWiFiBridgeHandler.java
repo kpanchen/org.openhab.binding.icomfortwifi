@@ -30,6 +30,7 @@ import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.icomfortwifi.RunnableWithTimeout;
 import org.openhab.binding.icomfortwifi.internal.api.iComfortWiFiApiClient;
+import org.openhab.binding.icomfortwifi.internal.api.models.response.CustomTypes.TempUnits;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemInfo;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemsInfo;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.ZoneStatus;
@@ -150,6 +151,11 @@ public class iComfortWiFiBridgeHandler extends BaseBridgeHandler {
         updateThings();
     }
 
+    //
+    public void setAlternateTemperatureUnit(TempUnits tempUnit) {
+        this.update(tempUnit);
+    }
+
     public void addAccountStatusListener(iComfortWiFiAccountStatusListener listener) {
         listeners.add(listener);
         listener.accountStatusChanged(getThing().getStatus());
@@ -206,6 +212,18 @@ public class iComfortWiFiBridgeHandler extends BaseBridgeHandler {
     private void update() {
         try {
             apiClient.update();
+            updateAccountStatus(ThingStatus.ONLINE);
+            updateThings();
+        } catch (Exception e) {
+            updateAccountStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, e.getMessage());
+            logger.debug("Failed to update system status", e);
+        }
+    }
+
+    // Requesting update from the back end in specified unit.
+    private void update(TempUnits tempUnit) {
+        try {
+            apiClient.update(tempUnit);
             updateAccountStatus(ThingStatus.ONLINE);
             updateThings();
         } catch (Exception e) {

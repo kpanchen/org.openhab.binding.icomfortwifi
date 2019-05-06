@@ -8,12 +8,21 @@
  */
 package org.openhab.binding.icomfortwifi.handler;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.TimeZone;
+
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.library.types.DateTimeType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
+import org.eclipse.smarthome.core.types.State;
+import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.icomfortwifi.internal.api.models.response.SystemsInfo;
 import org.openhab.binding.icomfortwifi.internal.configuration.iComfortWiFiThingConfiguration;
 
@@ -131,6 +140,16 @@ public abstract class BaseiComfortWiFiHandler extends BaseThingHandler {
         } else if (StringUtils.isEmpty(configuration.id)) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "Id not configured");
         }
+    }
+
+    protected State getAsDateTimeTypeOrNull(@Nullable Date date) {
+        if (date == null) {
+            return UnDefType.NULL;
+        }
+
+        long offsetMillis = TimeZone.getDefault().getOffset(date.getTime());
+        Instant instant = date.toInstant().plusMillis(offsetMillis);
+        return new DateTimeType(ZonedDateTime.ofInstant(instant, TimeZone.getDefault().toZoneId()));
     }
 
 }
