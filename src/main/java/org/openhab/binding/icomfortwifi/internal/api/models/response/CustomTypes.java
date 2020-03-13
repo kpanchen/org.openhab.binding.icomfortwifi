@@ -79,6 +79,38 @@ public class CustomTypes {
         }
     }
 
+    public enum UnifiedOperationMode {
+        @SerializedName("0")
+        OFF("off"),
+        @SerializedName("1")
+        HEAT("heat"),
+        @SerializedName("2")
+        COOL("cool"),
+        @SerializedName("3")
+        HEAT_COOL("heatcool"),
+        @SerializedName("6")
+        FAN_ONLY("fan-only"),
+        @SerializedName("13")
+        ECO("eco"),
+
+        UNKNOWN("-1");
+
+        private String unifiedOperationModeValue;
+
+        private UnifiedOperationMode(String unifiedOperationModeValue) {
+            this.unifiedOperationModeValue = unifiedOperationModeValue;
+        }
+
+        public String getUnifiedOperationModeValue() {
+            return this.unifiedOperationModeValue;
+        }
+
+        @Override
+        public String toString() {
+            return this.unifiedOperationModeValue;
+        }
+    }
+
     public enum SystemStatus {
         @SerializedName("0")
         IDLE(0),

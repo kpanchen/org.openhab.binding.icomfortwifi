@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="icomfortwifi"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+	<thing-type id="thermostat" listed="false">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="account" />
+		</supported-bridge-type-refs>
+		<label>iComfort WiFi Thermostat</label>
+		<description>This represents the iComfort WiFi Thermostat control display.</description>
+		<channel-groups>
+		  <channel-group id="alertsAndReminders" typeId="alert01" />
+		</channel-groups>
+          
+        <properties>            
+            <property name="vendor">Lennox</property>
+            <property name="systemName"></property>
+            <property name="gatewaySerialNumber"></property>
+            <property name="firmwareVersion"></property>
+        </properties>
+        <representation-property>gatewaySN</representation-property>
+		<config-description>
+			<parameter name="id" type="text" required="true" readOnly="true">
+				<label>ID</label>
+				<description>ID of the display</description>
+			</parameter>
+			<parameter name="name" type="text" required="false" readOnly="true">
+				<label>Name</label>
+				<description>Name of the display</description>
+			</parameter>
+		</config-description>
+	</thing-type>
+	<thing-type id="zone" listed="false">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="account" />
+		</supported-bridge-type-refs>
+		<label>iComfort WiFi Heating Zone</label>
+		<description>This represents the iComfort WiFi Heating Zone.</description>
+		<channels>
+			<channel id="Temperature" typeId="temperature" />
+			<channel id="Humidity" typeId="humidity" />
+			<channel id="SystemStatus" typeId="systemStatus" />
+			<channel id="OperationMode" typeId="operationMode" />
+			<channel id="UnifiedOperationMode" typeId="unifiedOperationMode" />
+			<channel id="AwayMode" typeId="awayMode" />
+			<channel id="FanMode" typeId="fanMode" />
+			<channel id="CoolSetPoint" typeId="coolSetPoint" />
+			<channel id="HeatSetPoint" typeId="heatSetPoint" />			
+		</channels>
+		<config-description>
+			<parameter name="id" type="text" required="true" readOnly="true">
+				<label>ID</label>
+				<description>ID of the zone</description>
+			</parameter>
+			<parameter name="name" type="text" required="false" readOnly="true">
+				<label>Name</label>
+				<description>Name of the zone</description>
+			</parameter>
+		</config-description>
+	</thing-type>
+	
+	<channel-group-type id="alert01">
+	   <label>Gateway Alerts</label>
+       <description>Alerts and Reminders</description>
+       <category>HVAC</category>
+       <channels>
+            <channel id="AlarmDescription" typeId="alarmDescription" />
+            <channel id="AlarmNbr" typeId="alarmNbr" />
+            <channel id="AlarmType" typeId="alarmType" />
+            <channel id="AlarmStatus" typeId="alarmStatus" />
+            <channel id="DateTimeSet" typeId="dateTimeSet" />
+            <channel id="AlertNumber" typeId="alertNumber" />
+        </channels>
+    </channel-group-type>
+</thing:thing-descriptions>
