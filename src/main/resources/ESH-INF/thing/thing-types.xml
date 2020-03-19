@@ -46,7 +46,8 @@
 			<channel id="AwayMode" typeId="awayMode" />
 			<channel id="FanMode" typeId="fanMode" />
 			<channel id="CoolSetPoint" typeId="coolSetPoint" />
-			<channel id="HeatSetPoint" typeId="heatSetPoint" />			
+			<channel id="HeatSetPoint" typeId="heatSetPoint" />
+			<channel id="SetPoint" typeId="setPoint" />			
 		</channels>
 		<config-description>
 			<parameter name="id" type="text" required="true" readOnly="true">

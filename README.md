@@ -2,12 +2,10 @@
 
 _This is a Open HAB 2 Binding for Lennox iComfort WiFi system / thermostat (Note this will not work with newer system S30/E30)._
 
-_(Some additional resources will be provided later)_
-
 ## Supported Things
 
 This binding supports two things:<br />
-1. Thermostat display (currently under development, no Channels currently supported for the thing, Building and Owner information planned)<br />
+1. Thermostat display (currently under development, only Alarm Channels currently supported for the thing)<br />
 2. Heating / Cooling Zone (multiple zones supported).
 
 
@@ -62,10 +60,12 @@ Temperature - Current zone temperature (Read Only)<br />
 Humidity - Current zone humidity (Read Only)<br />
 SystemStatus - Current system status (Read Only)<br />
 OperationMode - Current operation mode (Read / Write)<br />
+UnifiedOperationMode - Similar to OperationMode, compatible with Google Assistant (Read / Write)<br />
 AwayMode - Current away status (Read / Write)<br />
 FanMode - Current fan mode (Read / Write)<br />
 CoolSetPoint - Cool set point for the zone (Read / Write)<br />
 HeatSetPoint - Heat set point for the zone (Read / Write)<br />
+SetPoint - Heat or Cool set point for the zone (Read / Write)<br />
 
 
 ## Full Example
@@ -94,7 +94,7 @@ Number:Temperature Thermostat_Heat_Point    "Heat Set Point [%.1f %unit%]" <temp
 ```
 
 ```
-Thermostat items:
+//Thermostat items:
 String Alarm_Description "Alarm Description [%s]" <alarm> (gWholeHouse) {channel="icomfortwifi:thermostat:demoaccount:thermostat_1:alertsAndReminders#AlarmDescription"}
 Number Alarm_Code "Alarm Code [%s]" <alarm> (gWholeHouse) {channel="icomfortwifi:thermostat:demoaccount:thermostat_1:alertsAndReminders#AlarmNbr"}
 String Alarm_Type "Alarm Type [%s]" <alarm> (gWholeHouse) {channel="icomfortwifi:thermostat:demoaccount:thermostat_1:alertsAndReminders#AlarmType"}
@@ -104,6 +104,7 @@ Number Alarm_Number "Alarm Number [%s]" <alarm> (gWholeHouse) {channel="icomfort
 ```
 
 Sitemap example:
+
 ```
 Text item=Thermostat_Temperature
 Text item=Thermostat_Humudity
@@ -121,6 +122,18 @@ Text item=Alarm_Status
 Text item=Alarm_DateTimeSet
 
 Setpoint item=Alarm_Number
+```
+
+Items example for Google Assistant (for more details see Google Assistant for OpenHAB 2 documentation):
+
+```
+Group gHomeThermostatGA "House Thermostat" { ga="Thermostat" [modes="off,heat,cool,heatcool,eco", roomHint="Living Room"] } 
+  String Thermostate_Mode_GA "Thermostat Mode" (gHomeThermostatGA) {ga="thermostatMode", channel="icomfortwifi:zone:demoaccount:home_zone_1:UnifiedOperationMode"} //Available modes listed on the Group item
+  Number Thermostate_Temp_GA "House Temperature" (gHomeThermostatGA) {ga="thermostatTemperatureAmbient", channel="icomfortwifi:zone:demoaccount:home_zone_1:Temperature"}
+  Number Thermostate_Humid_GA "House Humidity" (gHomeThermostatGA) {ga="thermostatHumidityAmbient", channel="icomfortwifi:zone:demoaccount:home_zone_1:Humidity"} //Won't be shown in Google Home App, but will be return with voice responce
+  Number Thermostate_Setpoint_GA "House Setpoint" (gHomeThermostatGA) {ga="thermostatTemperatureSetpoint", channel="icomfortwifi:zone:demoaccount:home_zone_1:SetPoint"} //Temperature Set Point for Cool or Heat mode  
+  Number Thermostate_Setpoint_High_GA "House Setpoint High" (gHomeThermostatGA) {ga="thermostatTemperatureSetpointHigh", channel="icomfortwifi:zone:demoaccount:home_zone_1::CoolSetPoint"} //Temperature high (cooling) set point in auto-select Cool/Heat mode
+  Number Thermostate_Setpoint_Low_GA "House Setpoint Low" (gHomeThermostatGA) {ga="thermostatTemperatureSetpointLow", channel="icomfortwifi:zone:demoaccount:home_zone_1::HeatSetPoint"} //Temperature low (heating) set point in auto-select Cool/Heat mode
 ```
 
 ## Foot note!

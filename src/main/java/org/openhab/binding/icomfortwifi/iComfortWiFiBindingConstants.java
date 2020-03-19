@@ -52,6 +52,7 @@ public class iComfortWiFiBindingConstants {
     public static final String ZONE_FAN_MODE_CHANNEL = "FanMode";
     public static final String ZONE_COOL_SET_POINT_CHANNEL = "CoolSetPoint";
     public static final String ZONE_HEAT_SET_POINT_CHANNEL = "HeatSetPoint";
+    public static final String ZONE_SET_POINT_CHANNEL = "SetPoint"; // To set heat only / cool only point
 
     // TCS Channels
     public static final String TCS_ALARM_DESCRIPTION_CHANNEL = "alertsAndReminders#AlarmDescription";
